@@ -25,22 +25,15 @@ public:
     static float Lx;
     static float Ly;
 
-
-
-
 private:
 
     const unsigned int fNrows;
     const unsigned int fNcols;
-
     Pixel* fPixels;
 
     void SetCoordinates();   // set all the pixel coordinates
 
-
 };
-
-
 
 #endif
 

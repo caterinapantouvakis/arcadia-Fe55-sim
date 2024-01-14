@@ -12,7 +12,6 @@ struct Pixel{
     float charge;               // charge related to the hit
 
     void PrintValues() const;
-
 };
 
 #endif

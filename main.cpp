@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "Matrix.h"
 #include "Random.h"
 #include "CommandLine.h"
@@ -6,19 +7,19 @@
 
 int main(int argc, char** argv){
 
-    CommandLine cl(argc, argv);
+    // create CommandLine and retrieve argv inputs
+    typedef CommandLine cl;
+    cl::Init(argc, argv);
 
-
-    int size = (int)cl.getValue("size");
-
+    int size = (int)cl::GetValue("size");
     Matrix matrix(size,size);
 
-    float meanBaseline =    cl.contains("meanBaseline")  ? cl.getValue("meanBaseline") : 115;
-    float meanNoise =       cl.contains("meanNoise")     ? cl.getValue("meanNoise")    : 0;
-    float meanGain =        cl.contains("meanGain")      ? cl.getValue("meanGain")     : 10;
-    float sigmaBaseline =   cl.contains("sigmaBaseline") ? cl.getValue("sigmaBaseline"): 5;
-    float sigmaNoise =      cl.contains("sigmaNoise")    ? cl.getValue("sigmaNoise")   : 6;
-    float sigmaGain =       cl.contains("sigmaGain")     ? cl.getValue("sigmaGain")    : 3;
+    float meanBaseline =    cl::Contains("meanBaseline")  ? cl::GetValue("meanBaseline") : 115;
+    float meanNoise =       cl::Contains("meanNoise")     ? cl::GetValue("meanNoise")    : 0;
+    float meanGain =        cl::Contains("meanGain")      ? cl::GetValue("meanGain")     : 10;
+    float sigmaBaseline =   cl::Contains("sigmaBaseline") ? cl::GetValue("sigmaBaseline"): 5;
+    float sigmaNoise =      cl::Contains("sigmaNoise")    ? cl::GetValue("sigmaNoise")   : 6;
+    float sigmaGain =       cl::Contains("sigmaGain")     ? cl::GetValue("sigmaGain")    : 3;
 
 
     // set baseline, noise and gain for each pixel using three gaussian distributions
@@ -28,19 +29,15 @@ int main(int argc, char** argv){
             matrix(r, c).noise = matrix.SetNoise(meanNoise, sigmaNoise);
             matrix(r, c).gain = matrix.SetGain(meanGain, sigmaGain);
         }
-
     }
 
-    int nEvents = cl.contains("events") ? (int)cl.getValue("events") : 100;
+    int nEvents = cl::Contains("events") ? (int)cl::GetValue("events") : 100;
     Simulation simulation;
     Simulation::Hit hit;
 
     for(int iEv=0; iEv<nEvents; ++iEv){
         hit = simulation.GenerateHit();
     }
-
-
-
 
     return 0;
 }

@@ -4,9 +4,9 @@
 
 Simulation::Hit Simulation::GenerateHit(){
     Hit hit;
-    hit.x = Random::GetGenerator()->GenerateUniform(0, Matrix::Lx);
-    hit.y = Random::GetGenerator()->GenerateUniform(0, Matrix::Ly);
-    hit.radius = sqrt(Random::GetGenerator()->GenerateUniform(0, 15)); //Fix the extrema of the range ??
+    hit.x = Random::Uniform(0, Matrix::Lx);
+    hit.y = Random::Uniform(0, Matrix::Ly);
+    hit.radius = sqrt(Random::Uniform(0, 15)); //Fix the extrema of the range ??
     return hit;
 }
 
@@ -52,14 +52,13 @@ void Simulation::ComputeElectrons(Hit& hit){
 
 
 
-
+    /*
     if((unsigned int) left/Pixel::pitch == hitCol && (unsigned int) right/Pixel::pitch == hitCol && (unsigned int) up/Pixel::pitch == hitRow && (unsigned int) bottom/Pixel::pitch == hitRow)
         hit.hitPixels.insert(std::make_pair(std::make_pair(hitRow,hitCol), 1640.0f));
         return;
     }
     else{
-
-
-
     }
+    */
+
 }
