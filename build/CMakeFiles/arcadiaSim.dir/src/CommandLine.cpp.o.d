@@ -1,7 +1,7 @@
 CMakeFiles/arcadiaSim.dir/src/CommandLine.cpp.o: \
- /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/test/src/CommandLine.cpp \
+ /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/src/CommandLine.cpp \
  /usr/include/stdc-predef.h \
- /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/test/include/CommandLine.h \
+ /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/include/CommandLine.h \
  /usr/include/c++/11/string \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

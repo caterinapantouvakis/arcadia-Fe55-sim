@@ -5,6 +5,8 @@
 #include "CommandLine.h"
 #include "Simulation.h"
 
+#include <TApplication.h>
+
 int main(int argc, char** argv){
 
     // create CommandLine and retrieve argv inputs
@@ -13,14 +15,13 @@ int main(int argc, char** argv){
 
     int size = (int)cl::GetValue("size");
     Matrix matrix(size,size);
-
+    // per dopo: automatizzare questa cosa dei valori di default
     float meanBaseline =    cl::Contains("meanBaseline")  ? cl::GetValue("meanBaseline") : 115;
     float meanNoise =       cl::Contains("meanNoise")     ? cl::GetValue("meanNoise")    : 0;
     float meanGain =        cl::Contains("meanGain")      ? cl::GetValue("meanGain")     : 10;
     float sigmaBaseline =   cl::Contains("sigmaBaseline") ? cl::GetValue("sigmaBaseline"): 5;
     float sigmaNoise =      cl::Contains("sigmaNoise")    ? cl::GetValue("sigmaNoise")   : 6;
     float sigmaGain =       cl::Contains("sigmaGain")     ? cl::GetValue("sigmaGain")    : 3;
-
 
     // set baseline, noise and gain for each pixel using three gaussian distributions
     for(unsigned int r=0; r < matrix.GetNrows(); ++r){
@@ -32,12 +33,31 @@ int main(int argc, char** argv){
     }
 
     int nEvents = cl::Contains("events") ? (int)cl::GetValue("events") : 100;
-    Simulation simulation;
-    Simulation::Hit hit;
+    Simulation sim;
 
-    for(int iEv=0; iEv<nEvents; ++iEv){
-        hit = simulation.GenerateHit();
+
+    // 1. Generate Fe55 hit;
+    // 2. Get hit pixels using "square technique";
+    // 3. Compute collected charge for every hit pixel; Add noise/baseline/gain contributions
+    // 4. Save hit data in a Tree
+    // variable used to simulate the depth at which X-ray interacts.
+    // Settare usando la radice della profondità? O viene da allpix2?
+    float elCloudWidth = 0.05;  
+    for(int iEv=0; iEv < nEvents; ++iEv){
+        if( !(iEv % 100000) )
+            std::cout << "Event : " << iEv << std::endl;
+        
+        Hit hit = sim.GenerateHit(elCloudWidth);
+        auto hitPixels = sim.GetHitPixels(hit);
+        matrix.UpdateHitPixelsCount(hitPixels);
+        sim.SaveHitData(hit);
+
     }
+
+    //TH2I* hitMap = matrix.FillHitMap();
+    sim.ComputeScurve();
+    sim.SaveOutput("output.root");
+    
 
     return 0;
 }

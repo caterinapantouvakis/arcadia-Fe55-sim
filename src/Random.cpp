@@ -1,7 +1,5 @@
 #include "Random.h"
 
-#include <iostream>
-
 Random::Random(){
     unsigned long seed = std::chrono::system_clock::now().time_since_epoch().count();
     fRnd = TRandom3(seed);

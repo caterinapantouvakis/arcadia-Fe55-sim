@@ -27,8 +27,8 @@ public:
 
     // function to get values given a keyword, using the following syntax:
     // keyWord=value
-    static float GetValue(std::string keyword){
-        return Get()->GetValueImpl(keyword);
+    static float GetValue(std::string keyWord){
+        return Get()->GetValueImpl(keyWord);
     }
 
     // delete copy constructor and assignment operator to avoid copies
@@ -46,7 +46,7 @@ private:
     bool ContainsImpl(const std::string& word) const;
     //const std::vector<std::string>& GetInfoForAnalysis() const;
     const std::vector<std::string>& GetAllInfoImpl() const;
-    float GetValueImpl(std::string keyword) const;
+    float GetValueImpl(std::string keyWord) const;
     
 
 };

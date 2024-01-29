@@ -1,7 +1,7 @@
 CMakeFiles/arcadiaSim.dir/src/Pixel.cpp.o: \
- /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/test/src/Pixel.cpp \
+ /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/src/Pixel.cpp \
  /usr/include/stdc-predef.h \
- /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/test/include/Pixel.h \
+ /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/include/Pixel.h \
  /usr/include/c++/11/iostream \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
  /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h \

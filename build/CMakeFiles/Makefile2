@@ -54,10 +54,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/test
+CMAKE_SOURCE_DIR = /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/test/build
+CMAKE_BINARY_DIR = /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/build
 
 #=============================================================================
 # Directory level rules for the build root directory
@@ -81,14 +81,14 @@ clean: CMakeFiles/arcadiaSim.dir/clean
 CMakeFiles/arcadiaSim.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/arcadiaSim.dir/build.make CMakeFiles/arcadiaSim.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/arcadiaSim.dir/build.make CMakeFiles/arcadiaSim.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/test/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target arcadiaSim"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target arcadiaSim"
 .PHONY : CMakeFiles/arcadiaSim.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/arcadiaSim.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/test/build/CMakeFiles 7
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/arcadiaSim.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/test/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/build/CMakeFiles 0
 .PHONY : CMakeFiles/arcadiaSim.dir/rule
 
 # Convenience name for target.
