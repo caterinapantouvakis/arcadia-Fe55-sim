@@ -3,13 +3,14 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 class CommandLine{
 
 public:
 
     static CommandLine* Get();
-    static void Init(int argc, char** argv);
+    static bool Init(int argc, char** argv);
     ~CommandLine();
 
     // check if the word "word" is present
@@ -31,6 +32,10 @@ public:
         return Get()->GetValueImpl(keyWord);
     }
 
+    static void SetDefaultValue(const std::string& keyWord, float val){
+        return Get()->SetDefaultValueImpl(keyWord, val);
+    }
+
     // delete copy constructor and assignment operator to avoid copies
     CommandLine(const CommandLine&) = delete;
     CommandLine& operator=(const CommandLine&) = delete;
@@ -42,11 +47,13 @@ private:
     static CommandLine* cl;
     static bool fInit;
     std::vector<std::string> fWords;
+    std::map<std::string, float> fDefaultValues;
 
     bool ContainsImpl(const std::string& word) const;
     //const std::vector<std::string>& GetInfoForAnalysis() const;
     const std::vector<std::string>& GetAllInfoImpl() const;
     float GetValueImpl(std::string keyWord) const;
+    inline void SetDefaultValueImpl(const std::string& keyWord, float val) { fDefaultValues[keyWord] = val; }
     
 
 };

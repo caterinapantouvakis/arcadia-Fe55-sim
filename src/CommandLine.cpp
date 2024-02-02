@@ -15,23 +15,23 @@ CommandLine::CommandLine(int argc, char** argv){
 
 CommandLine::~CommandLine(){
   fWords.clear();
+  fDefaultValues.clear();
 }
 
 CommandLine* CommandLine::Get(){
   if(!fInit)
     cout << "CommandLine not initialized. Call Init to retrieve input arguments\n";
-
   return cl;
 }
 
-void CommandLine::Init(int argc, char** argv){
+bool CommandLine::Init(int argc, char** argv){
   if(!fInit){
     cl = new CommandLine(argc, argv);
     fInit = true;
-    return;
+    return true;
   }
   else 
-    return;
+    return false;
 }
 
 bool CommandLine::ContainsImpl(const string& word) const{
@@ -46,17 +46,21 @@ const vector<string>& CommandLine::GetAllInfoImpl() const {
   return fWords;
 }
 
-float CommandLine::GetValueImpl(std::string keyword) const{
-  if(!CommandLine::ContainsImpl(keyword)){
-    cout << "Keyword " << keyword << " not found" << endl; 
+float CommandLine::GetValueImpl(std::string keyWord) const{
+  // if keyword is not found in argv values, check if there is a 
+  // default value set
+  if(!ContainsImpl(keyWord)){
+    // non posso usare il metodo contains perché ci vuole C++20 e root si lamenta
+    if(fDefaultValues.contains(keyWord))
+    cout << "Keyword " << keyWord << " not found" << endl; 
     return 0;
   }
 
   std::string word;
   // loop over all the words passed in command line
-  for(auto w : fWords){
+  for(auto& w : fWords){
     // when word contains a certain keyword, it checks for "=" position
-    if( w.find(keyword) != std::string::npos ){
+    if( w.find(keyWord) != std::string::npos ){
       word = w;
       for(auto it = word.begin(); it != word.end(); ++it){
         if(*it == '='){
@@ -71,6 +75,5 @@ float CommandLine::GetValueImpl(std::string keyword) const{
 
   return std::stoul(word);
 }
-
 
 

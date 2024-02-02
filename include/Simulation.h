@@ -24,14 +24,20 @@ struct Hit{
 class Simulation{
 
 public:
+    enum class ChipSide{
+        front,
+        back
+    };
+
     Simulation();
     ~Simulation();
 
+    float RandomizeCloudWidth(float mu);
     Hit GenerateHit(const float sigma);
     HitPixels GetHitPixels(Hit& hit);
     void SaveHitData(Hit& hit);
     void SaveOutput(const char* name);
-    void ComputeScurve();
+    void ComputeScurve(int NumEvents);
 
     //template<typename T>
     //void Save(const T* object);
@@ -39,14 +45,16 @@ public:
 
 private:
     void FillNtuple(Hit& hit);
-
+    
     float fSigma;
     float fElNoise;
     float fTotalElectrons;
+    float fNormProb;
 
     TF2* fGaus2D;
     TH1F* fHistAnalog;
     TGraph* fScurve;
+    TF1* fWidthProb;
     TNtuple* fNtuple;
     TFile* fRootFile;
 };

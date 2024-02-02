@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/include -I/home/michele/Programmi/root/include
+CXX_INCLUDES = -I/home/michele/Scrivania/Arcadia/arcadia-Fe55-sim/include -I/home/michele/Programmi/root_cpp20/install/include
 
-CXX_FLAGS = 
+CXX_FLAGS = -std=c++20
 

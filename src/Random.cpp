@@ -21,3 +21,11 @@ double Random::GaussImpl(const double mean, const double sigma){
     return fRnd.Gaus(mean, sigma);
 }
 
+double Random::ExpImpl(const double tau){
+    return fRnd.Exp(tau);
+}
+
+double Random::PoissonImpl(const double mean){
+    return fRnd.PoissonD(mean);
+}
+

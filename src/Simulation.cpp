@@ -2,13 +2,11 @@
 #include "Random.h"
 #include "Matrix.h"
 
-#include <TBranch.h>
-
 #include <vector>
 
 Simulation::Simulation():
 fSigma(0.0),
-fElNoise(30.0),
+fElNoise(20.0),
 fTotalElectrons(1636),
 fScurve(nullptr),
 fRootFile(nullptr){
@@ -31,11 +29,49 @@ fRootFile(nullptr){
     fNtuple = new TNtuple("Ntuple","","Hit_x:Hit_y:Cloud_width:HitPix_row:HitPix_col:HitPix_charge");
 
     fHistAnalog = new TH1F("HistAnalog", "Analog spectrum", 150, 0, 1.5);
+
+    ChipSide side = ChipSide::back;
+
+    if(side == ChipSide::front)
+        fWidthProb = new TF1("WidthProb", "[c]*x*exp(-[k]*x*x)", 0, 5);
+    else if(side == ChipSide::back){
+        fWidthProb = new TF1("WidthProb", "[c]*x*exp(-[k]*([tk]-x*x))", 0, 2.5);
+        fWidthProb->SetParameter("tk", 200.0/25.0);
+    }
+
+    fWidthProb->SetParameter("c", 1);
+    fWidthProb->SetParameter("k", 14.3);
+
+    double integr = fWidthProb->Integral(fWidthProb->GetXmin(), fWidthProb->GetXmax());
+    fWidthProb->SetParameter("c", 1/integr);
 }
 
 Simulation::~Simulation(){
     fRootFile->Write();
     fRootFile->Close();
+}
+
+float Simulation::RandomizeCloudWidth(float mu){
+
+    double pmax = fWidthProb->GetMaximum();
+
+    double r1, r2 = 0;
+    double width = 0;
+
+    float a = fWidthProb->GetXmin();
+    float b = fWidthProb->GetXmax();
+
+    // rejection method
+    r2 = 1.5;
+    width = fWidthProb->GetParameter("k");
+
+    while(r2 > (fWidthProb->Eval(width)/pmax)){
+        r1 = Random::Uniform(0,1);
+        width = r1*(b-a)+a;
+        r2 = Random::Uniform(0,1);
+    } 
+
+    return width+0.08;    
 }
 
 Hit Simulation::GenerateHit(const float sigma){
@@ -84,10 +120,7 @@ HitPixels Simulation::GetHitPixels(Hit& hit){
     if(top < nRows && right < nCols) 
         hitPixCoords.insert(std::make_pair(top, right));
 
-    if(hitPixCoords.size() == 0)
-        std::cout << hit.x << " " << hit.y << std::endl;
-
-    // store hit pixels also in hit for future operations (??)
+    // store hit pixels also in hit for future operations
     for(auto& coords : hitPixCoords){
         hit.hitPixels.insert(std::make_pair(coords, 0.0));
     }
@@ -108,7 +141,6 @@ HitPixels Simulation::GetHitPixels(Hit& hit){
         
         double charge = fGaus2D->Integral(xMin, xMax, yMin, yMax, epsilon);
         charge *= fTotalElectrons;
-        //std::cout << hit.x << " " << hit.y << " " << charge << std::endl;
         charge += Random::Gauss(0.0, fElNoise);
         charge /= fTotalElectrons;
         hitPix.second = charge;
@@ -119,17 +151,18 @@ HitPixels Simulation::GetHitPixels(Hit& hit){
     return hitPixCoords;
 }
 
-void Simulation::ComputeScurve(){
+void Simulation::ComputeScurve(int NumEvents){
     unsigned int nBins = fHistAnalog->GetNbinsX();
-    unsigned int sum = 0;
+    float sum = 0;
 
     std::vector<double> threshold; 
     std::vector<double> rate;
 
+    // points to construct the Scurve graph
     for(unsigned int iBin=nBins; iBin > 0; --iBin){
         threshold.push_back( fHistAnalog->GetBinCenter(iBin) );
         sum += fHistAnalog->GetBinContent(iBin);
-        rate.push_back(sum);
+        rate.push_back(sum/NumEvents);
     }
 
     fScurve = new TGraph(rate.size(), &threshold[0], &rate[0]);
@@ -156,6 +189,7 @@ void Simulation::SaveOutput(const char* name = ""){
 
     fHistAnalog->Write();
     fScurve->Write();
+    fWidthProb->Write();
     fNtuple->Write();
     return;
 }

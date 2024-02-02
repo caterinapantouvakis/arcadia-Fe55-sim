@@ -6,6 +6,7 @@ project(arcadiaSim)
 find_package(ROOT REQUIRED COMPONENTS RIO Net)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 link_directories(${ROOT_LIBRARY_DIR})
+add_compile_options(-std=c++20)
 
 #----------------------------------------------------------------------------
 # Find ROOT (required package)
@@ -22,7 +23,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.h
                   ${PROJECT_SOURCE_DIR}/include/*.hpp)
 
 #----------------------------------------------------------------------------
-# Add the executable, and link it to the Geant4 libraries
+# Add the executable, and link it to the Root libraries
 #
 add_executable(arcadiaSim main.cpp ${sources} ${headers})
 target_link_libraries(arcadiaSim ${ROOT_LIBRARIES})
