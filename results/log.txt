@@ -1,0 +1,17 @@
+---- Simulation parameters ----
+
+Events = 300000
+Side : front
+Matrix size = 1
+Pixel pitch = 25
+Electronic noise = 30
+Cloud offset = 0.1264
+k-factor = 0.0012
+
+---- Fit results ----
+
+C_s/sigma = 5.11496
+N_0 = 0.0450095
+sigma = 0.0416582
+t_0 = 0.989026
+C_s = 0.21308

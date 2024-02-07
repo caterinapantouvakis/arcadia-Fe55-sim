@@ -6,6 +6,7 @@ using namespace std;
 
 CommandLine* CommandLine::cl = nullptr;
 bool CommandLine::fInit = false;
+string CommandLine::fDefaultStr = "###";  // sistemare
 
 CommandLine::CommandLine(int argc, char** argv){
   fWords.reserve(argc);
@@ -36,31 +37,35 @@ bool CommandLine::Init(int argc, char** argv){
 
 bool CommandLine::ContainsImpl(const string& word) const{
   for(auto it : fWords){
-    if( (it == word) || (it.find(word)!=std::string::npos) )
+    if( (it == word) || (it.find(word) != string::npos) )
       return true; 
   }
   return false;
 }
 
-const vector<string>& CommandLine::GetAllInfoImpl() const {
-  return fWords;
-}
-
-float CommandLine::GetValueImpl(std::string keyWord) const{
+float CommandLine::GetValueImpl(string keyWord) const{
   // if keyword is not found in argv values, check if there is a 
-  // default value set
+  // default value set. If a default value is set but another value for
+  // keyWord is set in command line, it retrieves the last one
   if(!ContainsImpl(keyWord)){
-    // non posso usare il metodo contains perché ci vuole C++20 e root si lamenta
-    if(fDefaultValues.contains(keyWord))
-    cout << "Keyword " << keyWord << " not found" << endl; 
-    return 0;
+    if(fDefaultValues.contains(keyWord)){
+      return fDefaultValues.at(keyWord);
+    }
+    else if(!fDefaultValues.contains(keyWord)){
+      cout << "No default value set for " << keyWord << " keyword" << endl; 
+      return -1;
+    }
+    else {
+      cout << "Keyword " << keyWord << " not found" << endl;
+      return -1;
+    }
   }
 
-  std::string word;
+  string word;
   // loop over all the words passed in command line
   for(auto& w : fWords){
     // when word contains a certain keyword, it checks for "=" position
-    if( w.find(keyWord) != std::string::npos ){
+    if( w.find(keyWord) != string::npos ){
       word = w;
       for(auto it = word.begin(); it != word.end(); ++it){
         if(*it == '='){
@@ -73,7 +78,31 @@ float CommandLine::GetValueImpl(std::string keyWord) const{
     }
   }
 
-  return std::stoul(word);
+  return stof(word);
 }
 
+const string& CommandLine::GetInfoImpl(const string& keyWord) const {
+  // if keyword is not found in argv values, check if there is a 
+  // default value set. If a default value is set but another value for
+  // keyWord is set in command line, it retrieves the last one
+  if(!ContainsImpl(keyWord)){
+    if(fDefaultInfo.contains(keyWord)){
+      return fDefaultInfo.at(keyWord);
+    }
+    else if(!fDefaultInfo.contains(keyWord)){
+      cout << "No default value set for " << keyWord << " keyword" << endl; 
+      return fDefaultStr;
+    }
+    else {
+      cout << "Keyword " << keyWord << " not found" << endl;
+      return fDefaultStr;
+    }
+  }
 
+  // return word after keyWord
+  for(auto it = fWords.begin(); it < fWords.end(); ++it){
+    if( it->find("--") != string::npos && it->find(keyWord) != string::npos )
+      return *(it+1);
+  }
+  return fDefaultStr;
+}

@@ -24,39 +24,46 @@ struct Hit{
 class Simulation{
 
 public:
-    enum class ChipSide{
-        front,
-        back
+    enum class ChipSide: char{
+        front = 'f',
+        back = 'b'
     };
 
-    Simulation();
+    Simulation(ChipSide side);
     ~Simulation();
+
+    inline ChipSide GetSide() const { return fSide; }
 
     float RandomizeCloudWidth(float mu);
     Hit GenerateHit(const float sigma);
     HitPixels GetHitPixels(Hit& hit);
     void SaveHitData(Hit& hit);
-    void SaveOutput(const char* name);
-    void ComputeScurve(int NumEvents);
-
-    //template<typename T>
-    //void Save(const T* object);
-
+    void SaveOutput(std::string& dir, const char* name);
+    void ComputeScurve(int nEvents, bool fit = false);
+    void Save(TNamed* object);
 
 private:
     void FillNtuple(Hit& hit);
+    void FitScurve();
     
+    ChipSide fSide;
     float fSigma;
     float fElNoise;
-    float fTotalElectrons;
+    static const float fTotalElectrons;
+    static float fWidthOffset;
     float fNormProb;
 
     TF2* fGaus2D;
     TH1F* fHistAnalog;
     TGraph* fScurve;
     TF1* fWidthProb;
+    TH1F* fHistSigma;
+    TF1* fScurveFit;
     TNtuple* fNtuple;
     TFile* fRootFile;
+
+    // list of objects to write to a TFile
+    std::vector<TNamed*> fObjToWrite;
 };
 
 #endif

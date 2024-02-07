@@ -1,2 +1,3 @@
-./build/*
-fitGauss2D.cpp
+build/
+macro.cpp
+k_front_back.txt
